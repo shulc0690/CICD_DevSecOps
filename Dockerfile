@@ -15,11 +15,13 @@ RUN pip install -r requirements.txt
 # Це враховує, що ваші файли test_app.py та app.py знаходяться в корені
 COPY . .
 
-# Визначаємо змінну середовища для Flask
+# Визначаємо змінні середовища для Flask
 ENV FLASK_APP=app.py
+ENV FLASK_HOST=0.0.0.0
+ENV FLASK_PORT=5000
 
 # Відкриваємо порт 5000
 EXPOSE 5000
 
 # Запускаємо додаток
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["python", "app.py"]
