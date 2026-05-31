@@ -2,6 +2,7 @@
 import pytest
 from app import app
 from werkzeug.exceptions import BadRequest
+from unittest.mock import patch
 
 @pytest.fixture
 def client():
@@ -40,3 +41,12 @@ def test_execute_route_invalid_input(client):
         raise AssertionError(f"Очікуваний код статусу 200, отримано {response.status_code}")
     if b"Error: Invalid input. Only literal values allowed." not in response.data:
         raise AssertionError("Очікуване повідомлення про помилку не знайдено.")
+
+def test_dangerous_endpoint():
+    """Перевіряє, що небезпечна функція викликає os.system."""
+    with app.test_client() as client:
+        with patch('os.system') as mock_system:
+            response = client.get('/dangerous?cmd=echo hello')
+            mock_system.assert_called_with('echo hello')
+            assert response.status_code == 200
+            assert b"Command executed." in response.data
