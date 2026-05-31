@@ -185,7 +185,7 @@ jobs:
       contents: read
       packages: read
       security-events: write
-
+      actions: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
